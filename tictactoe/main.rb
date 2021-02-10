@@ -28,7 +28,7 @@ def tictactoe
     # check if game is won
     winner = game.game_won
 
-    #next player
+    # next player
     player.change_player(player.next)
   end
 end
