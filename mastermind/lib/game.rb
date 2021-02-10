@@ -5,13 +5,13 @@ require_relative 'display'
 # game logic
 class Game
   include Display
-
   @solution = []
 
-  def initialize
-    #get mode for game
-    @mode = game_set_mode
+  attr_reader :mode, :turn_obj, :solution
 
+  def initialize
+    # get mode for game
+    @mode = game_set_mode
     # instantiate objects
     @turn_obj = Turn.new
     @solution_obj = Solution.new
@@ -22,14 +22,8 @@ class Game
   def play_game
     # get game solution
     @solution = game_set_up
-
     # initiate game turns
     game_turns
-
-  end
-
-  def mode
-    @mode
   end
 
   def game_set_mode
@@ -49,24 +43,19 @@ class Game
     end
   end
 
-  #initiate turns until game over
+  # initiate turns until game over
   def game_turns
-    until @turn_obj.game_over(@turn_obj.results)
-      @turn_obj.play_turn(solution, mode, @computer_solve_obj)
-    end
+    @turn_obj.play_turn(solution, mode, @computer_solve_obj) until @turn_obj.game_over(@turn_obj.results)
   end
 
   def play_again
     disp_play_again
     gets.chop.upcase == PLAY_AGAIN
   end
-  
-  def turn_object
-    @turn_obj
-  end
-
-  def solution
-    @solution
-  end
-
+  # def turn_object
+  #   @turn_obj
+  # end
+  # def solution
+  #   @solution
+  # end
 end

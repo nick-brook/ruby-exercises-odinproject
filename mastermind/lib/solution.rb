@@ -2,6 +2,7 @@
 
 require_relative 'display'
 
+# creates random solution
 class Solution
   include Display
 
@@ -21,5 +22,3 @@ class Solution
     @solution_arr
   end
 end
-
-

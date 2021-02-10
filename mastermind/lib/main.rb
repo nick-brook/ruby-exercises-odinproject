@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'game'
-require_relative 'board'
 require_relative 'display'
 require_relative 'solution'
 require_relative 'humansolution'

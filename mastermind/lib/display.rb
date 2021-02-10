@@ -6,11 +6,11 @@ require 'colorize'
 module Display
   COMP = 2
   HUMAN = 1
-  FIRST_GUESS = ["1","1","1","1"]
-  CORRECT_NUMBER = "Y"
-  CORRECT_PLACE = "X"
+  FIRST_GUESS = %w[1 1 1 1].freeze
+  CORRECT_NUMBER = 'Y'
+  CORRECT_PLACE = 'X'
   GAME_LENGTH = 10
-  PLAY_AGAIN = "Y"
+  PLAY_AGAIN = 'Y'
 
   # create color codes
   def disp_num_color(num)
@@ -68,7 +68,7 @@ module Display
   end
 
   def disp_enter_code
-    puts "Enter your 4 digit code for the computer to guess"
+    puts 'Enter your 4 digit code for the computer to guess'
   end
 
   def turn_display(turn_arr, results)
