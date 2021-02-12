@@ -106,7 +106,7 @@ class Turn
   # get user input returns user guess as an array
   def user_turn_input
     # get user input
-    disp_to_play if turn.zero
+    disp_to_play if turn.zero?
     num = gets.chop
     @turn_arr = num.split('') if valid_turn(num)
   end

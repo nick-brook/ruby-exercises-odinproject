@@ -22,6 +22,7 @@ class Game
   def play_game
     # get game solution
     @solution = game_set_up
+    p @solution
     # initiate game turns
     game_turns
   end

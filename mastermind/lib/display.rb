@@ -6,10 +6,10 @@ require 'colorize'
 module Display
   COMP = 2
   HUMAN = 1
-  FIRST_GUESS = %w[1 1 1 1].freeze
+  FIRST_GUESS = %w[1 1 2 2].freeze
   CORRECT_NUMBER = 'Y'
   CORRECT_PLACE = 'X'
-  GAME_LENGTH = 10
+  GAME_LENGTH = 12
   PLAY_AGAIN = 'Y'
 
   # create color codes
