@@ -13,8 +13,9 @@ class Turn
     @results = []
   end
 
+ # plays and displays each turn for either mode
   def play_turn(solution, mode, comp_obj)
-    # if valid input
+   
     if mode == HUMAN
       # check for valid turn
       turn_arr = user_turn_input
@@ -30,10 +31,6 @@ class Turn
     true
   end
 
-  # def turn
-  #   @turn
-  # end
-
   # calculates and displays results of turn
   def calc_and_display(turn_arr, solution)
     # calculate results
@@ -42,17 +39,21 @@ class Turn
     turn_display(turn_arr, results)
   end
 
-  # def results
-  #   @results
-  # end
-
-  def game_over(results)
-    # p "turn is #{@turn}"
+  def game_over(results,mode)
     if results.length == 8
-      disp_game_won
+      if mode == HUMAN
+        disp_game_won
+      else
+        disp_comp_won
+      end
       true
     elsif turn == GAME_LENGTH
-      disp_game_lost
+      if mode == HUMAN
+        disp_game_lost
+      else
+        disp_comp_lost
+      end
+      
       true
     else
       false

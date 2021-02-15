@@ -7,9 +7,10 @@ module Display
   COMP = 2
   HUMAN = 1
   FIRST_GUESS = %w[1 1 2 2].freeze
+  NUMBER_RANGE = %w[1 2 3 4 5 6].freeze
   CORRECT_NUMBER = 'Y'
   CORRECT_PLACE = 'X'
-  GAME_LENGTH = 12
+  GAME_LENGTH = 10
   PLAY_AGAIN = 'Y'
 
   # create color codes
@@ -54,8 +55,16 @@ module Display
     puts 'Congratulations you won!'
   end
 
+  def disp_comp_won
+    puts 'Computer wins - again!!'
+  end
+
+  def disp_comp_lost
+    puts "Computer couldn't guess it!!"
+  end
+
   def disp_game_lost
-    puts 'Your shit - Arrrgh!!'
+    puts 'Oh Noooooo... you lost!!'
   end
 
   def disp_play_again
@@ -75,7 +84,7 @@ module Display
     turn_arr.each do |item|
       print disp_num_color(item.to_s)
     end
-    print '  clues.. '
+    print '  score.. '
     results.each do |item|
       print disp_clue_color(item.to_s)
     end

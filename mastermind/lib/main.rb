@@ -7,6 +7,7 @@ require_relative 'humansolution'
 require_relative 'computer_solution'
 require_relative 'turn'
 
+# creates game object and starts game
 def mastermind
   game = Game.new
   game.play_game

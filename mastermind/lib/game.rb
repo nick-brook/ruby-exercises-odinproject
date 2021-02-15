@@ -8,11 +8,9 @@ class Game
   @solution = []
 
   attr_reader :mode, :turn_obj, :solution
-
+# get mode for game & instantiate objects
   def initialize
-    # get mode for game
     @mode = game_set_mode
-    # instantiate objects
     @turn_obj = Turn.new
     @solution_obj = Solution.new
     @human_solution_obj = HumanSolution.new
@@ -22,7 +20,6 @@ class Game
   def play_game
     # get game solution
     @solution = game_set_up
-    p @solution
     # initiate game turns
     game_turns
   end
@@ -46,17 +43,11 @@ class Game
 
   # initiate turns until game over
   def game_turns
-    @turn_obj.play_turn(solution, mode, @computer_solve_obj) until @turn_obj.game_over(@turn_obj.results)
+    @turn_obj.play_turn(solution, mode, @computer_solve_obj) until @turn_obj.game_over(@turn_obj.results,mode)
   end
 
   def play_again
     disp_play_again
     gets.chop.upcase == PLAY_AGAIN
   end
-  # def turn_object
-  #   @turn_obj
-  # end
-  # def solution
-  #   @solution
-  # end
 end
