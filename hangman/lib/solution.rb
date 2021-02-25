@@ -6,6 +6,8 @@ require_relative 'display'
 class Solution
   include Display
 
+  attr_reader :solution_arr
+
   def initialize
     @solution_arr = create_random_solution
   end
@@ -20,11 +22,9 @@ class Solution
       line = contents.readline.chomp
       solution_arr.push(line) if line.length > 4 && line.length < 13
     end
-    # choose random word
-    solution_arr.sample
-  end
 
-  def solution
-    @solution_arr
+    # choose random word and create arrray of letters
+    word = solution_arr.sample.upcase
+    word.split(//)
   end
 end

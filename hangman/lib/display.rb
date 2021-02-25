@@ -1,95 +1,105 @@
 # frozen_string_literal: true
 
-
 # player class creates object that contains player
 module Display
   FILE_NAME = '5desk.txt'
-
-
-  COMP = 2
-  HUMAN = 1
-  FIRST_GUESS = %w[1 1 2 2].freeze
-  NUMBER_RANGE = %w[1 2 3 4 5 6].freeze
-  CORRECT_NUMBER = 'Y'
-  CORRECT_PLACE = 'X'
-  GAME_LENGTH = 10
+  GAME_LENGTH = 7
   PLAY_AGAIN = 'Y'
+  MODE_PLAY = 'P'
+  MODE_SAVE = 'S'
+  GAME_SAVE = '1'
+  GAME_LOAD = '2'
+  GAME_NEW = '1'
+  SAVE_DIR = 'output'
 
-  # create color codes
-  def disp_num_color(num)
-    @colors = { '1' => "\e[0;30;41m  1  \e[0m",
-                '2' => "\e[0;30;43m  2  \e[0m",
-                '3' => "\e[0;30;46m  3  \e[0m",
-                '4' => "\e[0;30;44m  4  \e[0m",
-                '5' => "\e[0;30;103m  5  \e[0m",
-                '6' => "\e[0;30;47m  6  \e[0m" }[num]
+  MSGS = {
+    'load_or_new' =>   "\nEnter 1 for new game or 2 to load game",
+    'no_files' => "There are no saved files",
+    'invalid_file_num' => "\nPlease choose a number for a file",
+    'game_won' => "\nCongratulations you won!",
+    'game_instructions' => "Welcome to Hangman !\nTo play enter any letter to guess the word..\nYou have #{GAME_LENGTH} lives to win...",
+    'play_again' => "\nWould you like to play again? enter y or n !"
+  }
+
+  ERR_MSGS = {
+    'load_or_new' => "Invalid entry - Please enter 1 or 2",
+    'play_again' => "Invalid entry - Please enter y or n"
+  }
+
+  RGX = {
+    'load_or_new' => /^[12]{1}$/,
+    'play_again' => /^[YN]{1}$/
+  }
+
+  def disp_msg(message)
+    puts "\n#{message}"
   end
 
-  def disp_clue_color(clue)
-    {
-      'X' => "\e[91m\u25CF\e[0m ",
-      'Y' => "\e[37m\u25CB\e[0m "
-    }[clue]
+  def disp_file_arr(file_arr)
+    puts "\nChoose the number of the file you want to load"
+      file_arr.each_with_index do |file, index|
+        puts "#{index + 1}: #{file.delete_suffix('.txt')}"
+      end
   end
 
-  def disp_game_instructions
-    puts 'Instructions'
-    puts "\nTo play enter 4 numbers to choose colours .."
-    (1..6).each do |i|
-      print disp_num_color(i.to_s)
+  def disp_wrong_letters(wrong_arr)
+    puts "\nWrong letters: #{wrong_arr.join(', ')}" if wrong_arr.length > 0
+  end
+
+  def disp_resolved(resolved_arr)
+    puts "\n"
+    resolved_arr.each do |item|
+      if item == "_"
+        print '__ '
+      else
+        print item, " "
+      end
     end
-    print "\n\n Right colour wrong place : ", disp_clue_color('Y')
-    print "\n Right colour right place : ", disp_clue_color('X')
-    puts "\n\nYou have 10 goes to get the code..."
+    puts "\n"
   end
+
+  def disp_game_lost(solution_arr)
+    puts "\nNo more guesses... you lost!!"
+    puts "\nThe answer was #{solution_arr.join}"
+  end
+
 
   def disp_to_play
-    puts "\nMake your 4 choices!"
+    puts "\nGuess a letter!"
     puts "\n"
   end
 
-  def disp_invalid_entry
-    puts 'Please enter 4 digits (1 to 6)'
-    false
+  def disp_to_save
+    puts "\nTo save game enter 1 or a letter to continue"
+    puts "\n"
   end
 
-  def disp_game_won
-    puts 'Congratulations you won!'
+  def disp_invalid_char
+    puts 'Please enter a character'
   end
 
-  def disp_comp_won
-    puts 'Computer wins - again!!'
+  def disp_invalid_save_char
+    puts 'Please enter 1 to save or a letter to continue'
   end
 
-  def disp_comp_lost
-    puts "Computer couldn't guess it!!"
-  end
 
-  def disp_game_lost
-    puts 'Oh Noooooo... you lost!!'
-  end
 
   def disp_play_again
-    puts 'Would you like to play again? enter y or n !'
+    puts "\nWould you like to play again? enter y or n !"
   end
 
-  def disp_play_mode
-    puts 'To guess the computer generated code -- ENTER "C" '
-    puts 'or for the computer to guess your code ENTER "G"'
+  def disp_turns(turn)
+    puts "\nYou've lost #{turn} lives, #{GAME_LENGTH - turn} left."
   end
 
-  def disp_enter_code
-    puts 'Enter your 4 digit code for the computer to guess'
+  def disp_duplicate
+    puts "\nYou already guessed this letter, try again!"
   end
 
-  def turn_display(turn_arr, results)
-    turn_arr.each do |item|
-      print disp_num_color(item.to_s)
-    end
-    print '  score.. '
-    results.each do |item|
-      print disp_clue_color(item.to_s)
-    end
-    puts "\n"
+  def disp_file_name
+    puts "\nPlease enter a file name..."
   end
+
 end
+
+
