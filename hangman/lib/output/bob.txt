@@ -1,1 +1,0 @@
-{"solution_arr":["I","N","E","X","P","E","D","I","E","N","C","Y"],"turn":3,"guess_arr":["E","I","N"],"wrong_arr":["A","S","T"],"resolved_arr":["I","N","E","_","_","E","_","I","E","N","_","_"]}

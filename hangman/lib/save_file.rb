@@ -3,7 +3,9 @@
 require_relative 'display'
 require 'json'
 
-class Save_Game
+# class handling saving of game file
+class SaveGame
+  include Common
   include Display
 
   def initialize(solution_arr, turn, wrong_arr, guess_arr, resolved_arr)
@@ -12,39 +14,51 @@ class Save_Game
     @wrong_arr = wrong_arr
     @guess_arr = guess_arr
     @resolved_arr = resolved_arr
-    self.save_file
+    save_file
   end
 
+  # serialize text, create directory and save file
   def save_file
-
-    # get file name
     text = to_json
-
-    puts text
-    # create directory
     Dir.mkdir(SAVE_DIR) unless Dir.exist?(SAVE_DIR)
-    file_name = "#{SAVE_DIR}/#{get_file_name}.txt"
+    create_file(text)
+  end
+
+  # get valid file name from user and pass to file handler
+  def create_file(text)
+    user_file = user_input(INPUT_MSGS['file_name'])
+    file_name = "#{SAVE_DIR}/#{user_file}.TXT"
+    handle_file_errors(file_name, text)
+  end
+
+  # handle file errors
+  def handle_file_errors(file_name, text)
+    if File.exist?(file_name)
+      if user_input(INPUT_MSGS['file_exists']) == OVERRIGHT
+        write_file(file_name, text)
+      else
+        disp_msg(INFO_MSGS['file_not_saved'])
+      end
+    else
+      write_file(file_name, text)
+    end
+  end
+
+  # write contents to file
+  def write_file(file_name, text)
     File.open(file_name, 'w') do |file|
       file.puts text
     end
-
+    disp_msg(INFO_MSGS['file_saved'])
   end
 
-  def get_file_name
-    # get user input
-    disp_file_name
-    file_name = gets.chop
+  def to_json(*_args)
+    JSON.dump({
+                solution_arr: @solution_arr,
+                turn: @turn,
+                guess_arr: @guess_arr,
+                wrong_arr: @wrong_arr,
+                resolved_arr: @resolved_arr
+              })
   end
-
-  def to_json
-    JSON.dump ({
-      :solution_arr => @solution_arr,
-      :turn => @turn,
-      :guess_arr => @guess_arr,
-      :wrong_arr => @wrong_arr,
-      :resolved_arr => @resolved_arr
-    })
-  end
-
-
 end
