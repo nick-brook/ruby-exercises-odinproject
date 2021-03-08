@@ -20,13 +20,10 @@ def merge_sort(arr)
   # base case when arr length 1 or 0
   return arr if arr.length < 2
 
-  # split array into two halves
-  arr1 = arr.slice!(0, arr.length / 2)
-  arr2 = arr
   # recursively sort the left half of the array
-  arr_a = merge_sort(arr1)
+  arr_a = merge_sort(arr.slice!(0, arr.length / 2))
   # recursively sort the right half of the array
-  arr_b = merge_sort(arr2)
+  arr_b = merge_sort(arr)
   # merge together the two smaller arrays
   merged_arr = []
   # smallest element is always at start of one of the arary
