@@ -2,7 +2,6 @@
 
 # logic to manage link list nodes
 class LinkedList
-  # attr_reader :head, :tail
 
   def initialize
     # create head node and tail node set nodes to 2
@@ -107,10 +106,6 @@ class Node
 
   def update_next_node(next_node)
     @next_node = next_node
-  end
-
-  def update_value
-    @value = value
   end
 end
 
