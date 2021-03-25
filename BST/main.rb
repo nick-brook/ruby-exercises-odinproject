@@ -4,8 +4,6 @@
 class Tree
   attr_reader :root, :input_data
 
-  # include Rebalance
-
   def initialize(arr)
     @input_data = arr.uniq.sort
     @root = build_tree(input_data)
@@ -25,9 +23,8 @@ class Tree
     # if value is node value (duplicate) return
     return if value == node.value
 
-    # look left if value < node value
+    # look left if value < node value, if child exists recursive call with that child or add new node and update link
     if value < node.value
-      # if child exists recursive call with that child or add new node and update child link
       node.l_child ? insert(value, node.l_child) : node.update_l_child(Node.new(value, nil, nil))
     else
       node.r_child ? insert(value, node.r_child) : node.update_r_child(Node.new(value, nil, nil))
@@ -38,17 +35,12 @@ class Tree
     # if empty tree return null
     return if @root.nil?
 
-    # find the node to delete (N)
     node = find_node(value, @root)
-    if node
-      del_node_rec(node, num_children(node))
-    else
-      p 'value not found'
-    end
+    node ? del_node_rec(node, num_children(node)) : (p 'value not found')
   end
 
+  # recursive method calls relevant method for number of children
   def del_node_rec(node, num_children)
-    # puts "node to delete #{node.value}"
     del_no_child(node) if num_children.zero?
     del_one_child(node) if num_children == 1
     del_two_child(node) if num_children == 2
@@ -59,79 +51,54 @@ class Tree
     node == @root ? @root.update_value(nil) : update_parent(node, nil)
   end
 
+  # confirm which child to delete, update root if deleting root else update parent links
   def del_one_child(node)
-    # get child of node to be deleted
     child_node = node.r_child.nil? ? node.l_child : node.r_child
-    # if deleting node make child root otherwise 
     node == @root ? @root = child_node : update_parent(node, child_node)
   end
 
   # gets parent of node and updates pointer to child node
   def update_parent(node, value)
-    parent = find_parent(node, @root)
-    puts "parent value #{parent}"
+    parent = find_parent(node)
     return if parent.nil?
 
     parent.r_child == node ? parent.update_r_child(value) : parent.update_l_child(value)
   end
 
   def del_two_child(node)
-
-      # @root.update_value(node.r_child.value) if node == @root
-      # update value of node to delete with value of right child
-      if node == @root
-        node.update_value(node.r_child.value)
-        # delete next biggest node (now duplicate) with recursive call
-        del_node_rec(node.r_child, num_children(node.r_child))
-      else
-        next_biggest = find_next_biggest(node)
-        puts "next biggest #{next_biggest.value}"
-        node.update_value(next_biggest)
-        # delete next biggest node (now duplicate) with recursive call
-        del_node_rec(next_biggest, num_children(next_biggest))
-      end
+    min_r_subtree = find_min_r_subtree(node.r_child)
+    # update node with new value
+    node.update_value(min_r_subtree.value)
+    # delete duplicate node
+    del_node_rec(min_r_subtree, num_children(min_r_subtree))
   end
 
-  # find min value in right sub tree
-  def find_next_biggest(node)
-    # identify because it has no left child
-    if node.l_child 
-      find_next_biggest(node.l_child) 
-    else
-      return node
-    end
+  # find min value in right sub tree - identify because it has no left child
+  def find_min_r_subtree(node)
+    node.l_child ? find_min_r_subtree(node.l_child) : node
   end
 
+  # return node if matches search value, else look in relevant subtree (recursive)
   def find_node(value, node = @root)
     return nil if node.nil?
-    # if value matches the node value return that node
     return node if node.value == value
 
-    # else if value < root look left
     value < node.value ? find_node(value, node.l_child) : find_node(value, node.r_child)
   end
 
-  def find_parent(child, parent)
-    puts "parent node value #{parent.value}, child value #{child.value}"
-    # if looking for root no parent
+  # return parent node if found or look in relevant subtree - recursive
+  def find_parent(child, parent = @root)
     return nil if child == @root
 
     # check if parent is parent of node
     return parent if found_parent(parent, child)
 
-    # look left for smaller value or right
-    puts "parent right child value #{@root.r_child.value}, child value #{child.value}"
-    if child.value < parent.value
-      puts "go left"
-      find_parent(child, parent.l_child) 
-    else
-      puts "go right"
-      find_parent(child, parent.r_child)
-    end
+    child.value < parent.value ? find_parent(child, parent.l_child) : find_parent(child, parent.r_child)
   end
 
   def found_parent(parent, child)
     return true if parent.nil?
+
     parent.l_child == child || parent.r_child == child ? true : false
   end
 
@@ -139,7 +106,6 @@ class Tree
     count = 0
     count += 1 unless node.r_child.nil?
     count += 1 unless node.l_child.nil?
-    # puts "children #{count}"
     count
   end
 
@@ -177,7 +143,6 @@ class Tree
 
   # pre order root, left then right
   def pre_order
-    # return empty array if roo is nil
     return [] if @root.nil?
 
     order_rec(@root, [], 'pre')
@@ -215,37 +180,28 @@ class Tree
     node.l_child || node.r_child ? true : false
   end
 
-  def height(node)
-    height = 0
-    # check if node has no children
+  # recursive method to compare
+  def height(node, height = 0)
+    # no tree
     return nil unless @root
+
+    # has no children - reached bottom of tree
     return height unless children?(node)
 
-    height_rec(node, height)
-  end
-
-  def height_rec(node, height)
-    # no has no children - reached bottom of tree
-    return height unless children?(node)
-
-    height += 1
-    height_l = height_rec(node.l_child, height) if node.l_child
-    height_r = height_rec(node.r_child, height) if node.r_child
+    # recursive call if node has children
+    height_l = height(node.l_child, height + 1) if node.l_child
+    height_r = height(node.r_child, height + 1) if node.r_child
     nil_to_zero(height_l) >= nil_to_zero(height_r) ? height_l : height_r
   end
 
-  def depth(node)
+  def depth(node, depth = 1)
     return nil unless @root
     return 0 if node == @root
 
-    depth_rec(node, 1)
-  end
-
-  def depth_rec(node, depth)
-    parent = find_parent(node, @root)
+    parent = find_parent(node)
     return depth if parent == @root
 
-    depth_rec(parent, depth + 1)
+    depth(parent, depth + 1)
   end
 
   # calculate height of left and right child and compare
@@ -269,9 +225,9 @@ class Tree
 
   def print_orders
     puts "tree - level order #{level_order}"
-    # puts "tree - pre order #{pre_order}"
-    # puts "tree - post order #{post_order}"
-    # puts "tree - in order #{in_order}"
+    puts "tree - pre order #{pre_order}"
+    puts "tree - post order #{post_order}"
+    puts "tree - in order #{in_order}"
   end
 end
 
@@ -300,38 +256,17 @@ end
 
 # driver script
 
-# tree = Tree.new(Array.new(15) { rand(1..100) })
-# tree = Tree.new([1, 3, 8, 11, 17, 25, 35, 43, 56, 78, 89])
-tree = Tree.new([1, 2, 3, 4, 5, 8, 10, 11, 12, 13, 15])
-# tree = Tree.new([1, 8, 15])
-# tree.balanced? ? (puts 'tree is balanced') : (puts 'tree is unbalanced')
-# tree.print_orders
-# tree.insert(9)
-# tree.insert(7)
-# tree.insert(12)
-# tree.insert(13)
-# tree.insert(13)
-# tree.insert(-1)
-# tree.insert(0)
-# tree.insert(55)
-# tree.insert(77)
-tree.print_orders
-# tree.del_node(8)
-# tree.print_orders
-# puts tree.find_node(12)
-tree.del_node(12)
-# puts tree.find_node(12)
-tree.print_orders
-# tree.del_node(7)
-
-# tree.print_orders
-
-# tree.print_orders
+tree = Tree.new(Array.new(15) { rand(1..100) })
+# tree = Tree.new([1, 2, 4, 5, 8, 12, 56, 78, 89])
 tree.balanced? ? (puts 'tree is balanced') : (puts 'tree is unbalanced')
-# tree.insert(110)
-# tree.insert(112)
-# tree.insert(118)
-# tree.balanced? ? (puts 'tree is balanced') : (puts 'tree is unbalanced')
-# tree.rebalance
-# tree.balanced? ? (puts 'tree is balanced') : (puts 'tree is unbalanced')
-# tree.print_orders
+tree.print_orders
+tree.balanced? ? (puts 'tree is balanced') : (puts 'tree is unbalanced')
+tree.insert(110)
+tree.insert(112)
+tree.insert(118)
+tree.balanced? ? (puts 'tree is balanced') : (puts 'tree is unbalanced')
+tree.rebalance
+tree.balanced? ? (puts 'tree is balanced') : (puts 'tree is unbalanced')
+tree.print_orders
+tree.del_node(8)
+tree.print_orders
