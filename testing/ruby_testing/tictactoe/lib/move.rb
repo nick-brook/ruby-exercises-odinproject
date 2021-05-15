@@ -21,7 +21,7 @@ class Move
     if move >= 1 && move <= 9 
       true 
     else
-      disp_invalid_move 
+      disp_invalid_move
       false
     end
   end

@@ -61,84 +61,14 @@ end
 
 describe Move do
 
-  # in_range? method
-  describe '#in range' do
-    context 'checking range' do
-
-      subject(:range_obj) { described_class.new }
-
-      it 'when move is 4 in range' do
-        #arrange
-        test_move = 4
-        #act
-        result = range_obj.in_range?(test_move)
-        #assert
+  # initialise expect @first_move to be true
+  describe 'initialize' do
+    context '@first_move to be true' do
+      subject(:init_obj) { described_class.new }
+      it 'set to true' do
+        result =  init_obj.instance_variable_get(:@first_move)
         expect(result).to be true
       end
-
-      it 'when move is 1 valid limit' do
-        #arrange
-        test_move = 1
-        #act
-        result = range_obj.in_range?(test_move)
-        #assert
-        expect(result).to be true
-      end
-
-      it 'when move is 9 valid limit' do
-        #arrange
-        test_move = 9
-        #act
-        result = range_obj.in_range?(test_move)
-        #assert
-        expect(result).to be true
-      end
-
-      it 'when move is 10 invalid' do
-        #arrange
-        test_move = 10
-        #act
-        result = range_obj.in_range?(test_move)
-        #assert
-        expect(result).to be false
-      end
-
-      it 'when move is 0 invalid' do
-        #arrange
-        test_move = 0
-        #act
-        result = range_obj.in_range?(test_move)
-        #assert
-        expect(result).to be false
-      end
-
-    end
-  end
-
-  # duplicate method
-  describe '#empty_square?' do
-    context 'check if move already taken' do
-
-      subject(:duplicate_obj) { described_class.new }
-
-      it 'when board entry is availabe' do
-        test_board_entry = ' '
-        result = duplicate_obj.empty_square?(test_board_entry)
-        expect(result).to be true
-      end
-
-      it 'when board entry is X' do
-        test_board_entry = 'X'
-        result = duplicate_obj.empty_square?(test_board_entry)
-        expect(result).to be false
-      end
-
-      it 'when board entry is O' do
-        test_board_entry = 'O'
-        result = duplicate_obj.empty_square?(test_board_entry)
-        expect(result).to be false
-      end
-
     end
   end
 
@@ -204,5 +134,114 @@ describe Move do
     end
 
   end
+
+  # in_range? method
+  describe '#in range' do
+    context 'checking range' do
+
+      subject(:range_obj) { described_class.new }
+
+      it 'when move is 4 in range' do
+        #arrange
+        test_move = 4
+        #act
+        result = range_obj.in_range?(test_move)
+        #assert
+        expect(result).to be true
+      end
+
+      it 'when move is 1 valid limit' do
+        #arrange
+        test_move = 1
+        #act
+        result = range_obj.in_range?(test_move)
+        #assert
+        expect(result).to be true
+      end
+
+      it 'when move is 9 valid limit' do
+        #arrange
+        test_move = 9
+        #act
+        result = range_obj.in_range?(test_move)
+        #assert
+        expect(result).to be true
+      end
+
+      it 'when move is 10 invalid' do
+        #arrange
+        test_move = 10
+        #act
+        result = range_obj.in_range?(test_move)
+        #assert
+        expect(result).to be false
+      end
+
+      it 'when move is 0 invalid' do
+        #arrange
+        test_move = 0
+        #act
+        result = range_obj.in_range?(test_move)
+        #assert
+        expect(result).to be false
+      end
+
+      # test outputs puts from disp_invalid move
+      before do
+        allow(range_obj).to receive(:disp_invalid_move)
+      end
+
+      xit 'invalid entry calls disp_invalid_move' do
+        test_move = 0
+        result = range_obj.in_range?(test_move)
+        expect(disp_invalid_move).to 
+       
+      end
+
+    end
+  end
+
+  # duplicate method
+  describe '#empty_square?' do
+    context 'check if move already taken' do
+
+      subject(:duplicate_obj) { described_class.new }
+
+      it 'when board entry is availabe' do
+        test_board_entry = ' '
+        result = duplicate_obj.empty_square?(test_board_entry)
+        expect(result).to be true
+      end
+
+      it 'when board entry is X' do
+        test_board_entry = 'X'
+        result = duplicate_obj.empty_square?(test_board_entry)
+        expect(result).to be false
+      end
+
+      it 'when board entry is O' do
+        test_board_entry = 'O'
+        result = duplicate_obj.empty_square?(test_board_entry)
+        expect(result).to be false
+      end
+
+
+
+    end
+  end
+
+  # get move method
+  describe '#get move' do
+    context '' do
+
+      subject(:duplicate_obj) { described_class.new }
+
+      it '' do
+     
+      end
+
+    end
+  end
+  
 end
 
